@@ -2,7 +2,6 @@
 import {ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import type {UploadProps, UploadUserFile} from 'element-plus'
 
 
 const progressHandler = (e: any) => {
