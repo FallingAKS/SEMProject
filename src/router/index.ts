@@ -14,7 +14,7 @@ const routes = [
             {
                 path: '/history/:batchID',
                 name: 'filter',
-                component: () => import('~/components/FilterPage.vue')
+                component: () => import('~/components/ResultPage.vue')
             },
         ]
     },

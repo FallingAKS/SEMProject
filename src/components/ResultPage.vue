@@ -325,52 +325,56 @@ const handleCurrentChange = (val: number) => {
 </script>
 
 <template>
-  <div class="common-layout">
+  <div style="position: absolute; left: 10%; top: 0; width: 90%;">
     <el-container>
       <el-header style="height: 40px;">
         <el-row>
-          <el-col :span="20">
+          <el-col :span="1" />
+          <el-col :span="17">
             <el-button :icon="ArrowLeft" type="success">返回</el-button>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <!--todo: 搜索框，八嘎，不写了-->
-<el-select
-      v-model="value"
-      placeholder="Select"
-      size="large"
-      style="width: 340px; margin-left: -120px;"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-    </el-select>
+            <el-select
+                  v-model="value"
+                  placeholder="Select"
+                  size="large"
+                  style="width: 340px; margin-left: -120px;"
+                >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </el-col>
         </el-row>
       </el-header>
 
       <el-main>
-        <el-table :data="tableData" stripe style="width: 100%">
-          <el-table-column prop="id" label="数据ID" width="100"/>
-          <el-table-column prop="elasticityModulus" label="弹性模量" width="124"/>
-          <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" width="124"/>
-          <el-table-column prop="panelDamageArea" label="面板损伤面积" width="124"/>
-          <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" width="124"/>
-          <el-table-column prop="connectorsNumber" label="连接件数量" width="124"/>
-          <el-table-column prop="backBoltsNumber" label="背面螺栓数量" width="124"/>
-          <el-table-column prop="panelVerticality" label="面板垂直度" width="124"/>
-          <el-table-column prop="stitchingWidth" label="拼缝宽度" width="124"/>
-          <el-table-column prop="panelSize" label="面板尺寸" width="124"/>
-          <el-table-column prop="eresult" label="熵权法结果" width="150"/>
-          <el-table-column prop="rresult" label="粗糙集结果" width="150"/>
+        <el-table :data="tableData" stripe style="margin-left: -30px;">
+          <el-table-column prop="id" label="数据ID" width="90"/>
+          <el-table-column prop="elasticityModulus" label="弹性模量" width="90"/>
+          <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" width="90"/>
+          <el-table-column prop="panelDamageArea" label="面板损伤面积" width="90"/>
+          <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" width="90"/>
+          <el-table-column prop="connectorsNumber" label="连接件数量" width="90"/>
+          <el-table-column prop="backBoltsNumber" label="背面螺栓数量" width="90"/>
+          <el-table-column prop="panelVerticality" label="面板垂直度" width="90"/>
+          <el-table-column prop="stitchingWidth" label="拼缝宽度" width="90"/>
+          <el-table-column prop="panelSize" label="面板尺寸" width="90"/>
+          <el-table-column prop="panelSize" label="偏移量X" width="90"/>
+          <el-table-column prop="panelSize" label="偏移量Y" width="90"/>
+          <el-table-column prop="panelSize" label="偏移量Z" width="90"/>
+          <el-table-column prop="eresult" label="熵权法结果" width="100"/>
+          <el-table-column prop="rresult" label="粗糙集结果" width="100"/>
         </el-table>
 
 <br/>
   <el-row>
-    <el-col :span="8"><div class="grid-content ep-bg-purple" /></el-col>
-    <el-col :span="16"><el-pagination
+    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
+    <el-col :span="18"><el-pagination
             v-model:current-page="currentPage3"
             v-model:page-size="pageSize3"
             :small="small"
