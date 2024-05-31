@@ -20,6 +20,7 @@ declare module 'vue' {
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     FilterPage: typeof import('./components/FilterPage.vue')['default']
     MainPage: typeof import('./components/MainPage.vue')['default']
     ResultPage: typeof import('./components/ResultPage.vue')['default']
