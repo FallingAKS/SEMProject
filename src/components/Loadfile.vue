@@ -41,7 +41,7 @@ const submitUpload = () => {
 
 <template>
   <div id="contentContainer" class="flex-content-around h-full">
-    <div id="upLoaderContainer" class="flex-col" style="margin: auto 300px">
+    <div id="upLoaderContainer" class="flex-col" style="margin: auto; padding: 0 500px">
       <el-upload
           class="avatar-uploader"
           drag
