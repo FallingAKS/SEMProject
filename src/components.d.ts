@@ -17,6 +17,7 @@ declare module 'vue' {
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FilterPage: typeof import('./components/FilterPage.vue')['default']
+    Loadfile: typeof import('./components/Loadfile.vue')['default']
     MainPage: typeof import('./components/MainPage.vue')['default']
     MainStructure: typeof import('./components/MainStructure.vue')['default']
     ResultPage: typeof import('./components/ResultPage.vue')['default']

@@ -9,18 +9,18 @@ const routes = [
             {
                 path: '/main',
                 name: 'fileLoad',
-                component: () => import('~/components/MainPage.vue')
+                component: () => import('~/components/Loadfile.vue')
             },
             {
-                path: '/history/:batchID',
+                path: '/history',
                 name: 'filter',
                 component: () => import('~/components/FilterPage.vue')
             },
         ]
     },
     {
-        path: '/history/result/:batchID',
-        name: 'historyResult',
+        path: '/result/:batchID',
+        name: 'history',
         component: () => import('~/components/ResultPage.vue')
     }
 ]
