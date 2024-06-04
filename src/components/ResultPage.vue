@@ -249,7 +249,7 @@ const handleCurrentChange = (val: number) => {
 <template>
   <div>
     <el-container>
-      <el-header style="height: 40px;">
+      <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
         <el-button :icon="ArrowLeft" type="success" @click="$router.push('/main')">返回</el-button>
       </el-header>
 
@@ -290,9 +290,6 @@ const handleCurrentChange = (val: number) => {
 
       </el-main>
     </el-container>
-  </div>
-  <div style="position: absolute; top: 0; left: 0; height: 40px; width: auto; background: #21ba45">
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   </div>
 </template>
 
