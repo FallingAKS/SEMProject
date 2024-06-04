@@ -228,7 +228,6 @@ const tableData = ref([
     rresult: 0.5
   },
 ]);
-ref(5);
 const currentPage = ref(5)
 const pageSize = ref(100)
 const small = ref(false)
@@ -250,7 +249,7 @@ const handleCurrentChange = (val: number) => {
 <template>
   <div>
     <el-container>
-      <el-header style="height: 40px;">
+      <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
         <el-button :icon="ArrowLeft" type="success" @click="$router.push('/main')">返回</el-button>
       </el-header>
 

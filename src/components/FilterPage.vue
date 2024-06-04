@@ -310,9 +310,9 @@ const options = [
   },
 ]
 
-const tableWidth = ref(['90','90','90','90','90',
+const tableWidth = ref(['70','90','90','90','90',
   '90','90','90','90','90',
-  '90','90','90','100','100'])
+  '80','80','80','80','80'])
 
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
@@ -325,11 +325,12 @@ const handleCurrentChange = (val: number) => {
 <template>
   <div class="flex-col h-full w-full">
     <div id="TopBar" style="flex: 2;">
-      <div class="grow"></div>
+      <div class="grow" style="position: relative;"></div>
       <el-select
           v-model="value"
           placeholder="Select"
           size="large"
+          style="width: 30%; float: right; margin-right: 50px; margin-top: 10px; margin-bottom: 10px;"
       >
         <el-option
             v-for="item in options"
@@ -358,7 +359,6 @@ const handleCurrentChange = (val: number) => {
         <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>
       </el-table>
     </div>
-    <div id="pagination" style="flex: 1; background: #21ba45; position: relative;">
       <el-pagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
@@ -369,9 +369,8 @@ const handleCurrentChange = (val: number) => {
           :total="1000"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          style="text-align: center"
+          style="margin-left: calc(50% - 250px);"
       />
-    </div>
 
 <!--    <el-container>-->
 <!--      <el-header style="height: 40px;">-->
