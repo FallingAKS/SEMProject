@@ -5,70 +5,66 @@ import {
   Menu as IconMenu,
   Location,
   Setting,
+  TurnOff,
 } from '@element-plus/icons-vue'
+import {useRouter} from "vue-router";
 
 const isCollapse = ref(true)
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+const activeIndex = ref("main")
+const router = useRouter()
+
+function handleOpen(key: string, keyPath: string[]) {
+console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
+
+const selectHandler = (index: string) => {
+  console.log(index)
+  if(index === "toggle") {
+    isCollapse.value = !isCollapse.value
+    return
+  }
+  activeIndex.value = index;
+  router.push(`/${index}`);
+}
 </script>
 
 <template>
-  <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-    <el-radio-button :value="false">expand</el-radio-button>
-    <el-radio-button :value="true">collapse</el-radio-button>
-  </el-radio-group>
-  <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo"
-      :collapse="isCollapse"
-      @open="handleOpen"
-      @close="handleClose"
-  >
-    <el-sub-menu index="1">
-      <template #title>
-        <el-icon>
-          <location/>
-        </el-icon>
-        <span>Navigator One</span>
-      </template>
-      <el-menu-item-group>
-        <template #title><span>Group One</span></template>
-        <el-menu-item index="1-1">item one</el-menu-item>
-        <el-menu-item index="1-2">item two</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title><span>item four</span></template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon>
-        <icon-menu/>
-      </el-icon>
-      <template #title>Navigator Two</template>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <el-icon>
-        <document/>
-      </el-icon>
-      <template #title>Navigator Three</template>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon>
-        <setting/>
-      </el-icon>
-      <template #title>Navigator Four</template>
-    </el-menu-item>
-  </el-menu>
-  <div class="content">
-    <RouterView/>
+  <div id="container" class="flex h-full w-full">
+    <div id="menu">
+      <el-menu
+          :default-active="activeIndex"
+          class="el-menu-vertical-demo h-full"
+          :collapse="isCollapse"
+          @open="handleOpen"
+          @close="handleClose"
+          @select="selectHandler"
+      >
+        <el-menu-item index="main">
+          <el-icon>
+            <icon-menu/>
+          </el-icon>
+          <template #title>上传文件</template>
+        </el-menu-item>
+        <el-menu-item index="history">
+          <el-icon>
+            <document/>
+          </el-icon>
+          <template #title>查看历史结果</template>
+        </el-menu-item>
+        <el-menu-item index="toggle">
+          <el-icon>
+            <TurnOff />
+          </el-icon>
+          <template #title>收起面板</template>
+        </el-menu-item>
+      </el-menu>
+    </div>
+    <div id="content" class="grow">
+      <RouterView/>
+    </div>
   </div>
 </template>
 

@@ -40,8 +40,8 @@ const submitUpload = () => {
 </script>
 
 <template>
-  <div id="content">
-    <div id="upLoaderContainer">
+  <div id="contentContainer" class="flex-content-around h-full">
+    <div id="upLoaderContainer" class="flex-col" style="margin: auto; padding: 0 500px">
       <el-upload
           class="avatar-uploader"
           drag
@@ -74,18 +74,6 @@ const submitUpload = () => {
 </template>
 
 <style scoped>
-#content {
-  display: flex;
-  justify-content: center;
-}
-
-#upLoaderContainer {
-  display: flex;
-  flex-direction: column;
-
-  margin: auto 0;
-}
-
 .avatar-uploader .el-upload {
   border: 1px dashed var(--el-border-color);
   border-radius: 6px;
