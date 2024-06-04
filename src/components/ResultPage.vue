@@ -228,7 +228,6 @@ const tableData = ref([
     rresult: 0.5
   },
 ]);
-ref(5);
 const currentPage = ref(5)
 const pageSize = ref(100)
 const small = ref(false)
@@ -291,6 +290,9 @@ const handleCurrentChange = (val: number) => {
 
       </el-main>
     </el-container>
+  </div>
+  <div style="position: absolute; top: 0; left: 0; height: 40px; width: auto; background: #21ba45">
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   </div>
 </template>
 
