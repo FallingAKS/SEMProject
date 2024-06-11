@@ -1,7 +1,37 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 
-const tableData = ref([
+interface Data {
+  id: number,
+  elasticityModulus: number,
+  structuralAdhesiveStress: number,
+  panelDamageArea: number,
+  structuralAdhesiveDamageLength: number,
+  connectorsNumber: number,
+  backBoltsNumber: number,
+  panelVerticality: number,
+  stitchingWidth: number,
+  panelSize: number,
+  rresult: number,
+}
+
+const tableRowClassName = (
+    {
+      row,
+      rowIndex,
+    }: {
+      row: Data
+      rowIndex: number
+    }) => {
+  if (rowIndex === 1) {
+    return 'warning-row'
+  } else if (rowIndex === 3) {
+    return 'success-row'
+  }
+  return ''
+}
+
+const tableData: Data[] = [
   {
     id: 1,
     elasticityModulus: 210,
@@ -13,7 +43,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -27,7 +56,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -41,7 +69,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -55,7 +82,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -69,7 +95,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -83,7 +108,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -97,7 +121,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -111,7 +134,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -125,7 +147,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -139,7 +160,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -153,7 +173,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -167,7 +186,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -181,7 +199,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -195,7 +212,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -209,7 +225,6 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
   {
@@ -223,10 +238,9 @@ const tableData = ref([
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    eresult: 0.5,
     rresult: 0.5
   },
-]);
+];
 
 const currentPage = ref(5)
 const pageSize = ref(100)
@@ -310,9 +324,9 @@ const options = [
   },
 ]
 
-const tableWidth = ref(['70','90','90','90','90',
-  '90','90','90','90','90',
-  '80','80','80','80','80'])
+const tableWidth = ref(['70', '90', '90', '90', '90',
+  '90', '90', '90', '90', '90',
+  '80', '80', '80', '100', '100'])
 
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
@@ -341,8 +355,10 @@ const handleCurrentChange = (val: number) => {
       </el-select>
     </div>
     <div id="content" style="flex: 8; padding: 30px">
-      <el-table :data="tableData" stripe>
+      <el-table :data="tableData" stripe
+                :row-class-name="tableRowClassName">
         <el-table-column prop="id" label="数据ID" :width="tableWidth[0]"/>
+        <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>
         <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
         <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
         <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
@@ -355,84 +371,82 @@ const handleCurrentChange = (val: number) => {
         <el-table-column prop="panelSize" label="偏移量X" :width="tableWidth[10]"/>
         <el-table-column prop="panelSize" label="偏移量Y" :width="tableWidth[11]"/>
         <el-table-column prop="panelSize" label="偏移量Z" :width="tableWidth[12]"/>
-        <el-table-column prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
-        <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>
       </el-table>
     </div>
-      <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :small="small"
-          :disabled="disabled"
-          :background="background"
-          layout="prev, pager, next, jumper"
-          :total="1000"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          style="margin-left: calc(50% - 250px);"
-      />
+    <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :small="small"
+        :disabled="disabled"
+        :background="background"
+        layout="prev, pager, next, jumper"
+        :total="1000"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        style="margin-left: calc(50% - 250px);"
+    />
 
-<!--    <el-container>-->
-<!--      <el-header style="height: 40px;">-->
-<!--        <el-row>-->
-<!--          <el-col :span="18" />-->
-<!--          <el-col :span="6">-->
-<!--            <el-select-->
-<!--                  v-model="value"-->
-<!--                  placeholder="Select"-->
-<!--                  size="large"-->
-<!--                  style="width: 340px; margin-left: -120px;"-->
-<!--                >-->
-<!--              <el-option-->
-<!--                v-for="item in options"-->
-<!--                :key="item.value"-->
-<!--                :label="item.label"-->
-<!--                :value="item.value"-->
-<!--              />-->
-<!--            </el-select>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
-<!--      </el-header>-->
+    <!--    <el-container>-->
+    <!--      <el-header style="height: 40px;">-->
+    <!--        <el-row>-->
+    <!--          <el-col :span="18" />-->
+    <!--          <el-col :span="6">-->
+    <!--            <el-select-->
+    <!--                  v-model="value"-->
+    <!--                  placeholder="Select"-->
+    <!--                  size="large"-->
+    <!--                  style="width: 340px; margin-left: -120px;"-->
+    <!--                >-->
+    <!--              <el-option-->
+    <!--                v-for="item in options"-->
+    <!--                :key="item.value"-->
+    <!--                :label="item.label"-->
+    <!--                :value="item.value"-->
+    <!--              />-->
+    <!--            </el-select>-->
+    <!--          </el-col>-->
+    <!--        </el-row>-->
+    <!--      </el-header>-->
 
-<!--      <el-main>-->
-<!--        <el-table :data="tableData" stripe style="margin-left: -30px;">-->
-<!--          <el-table-column prop="id" label="数据ID" :width="tableWidth[0]"/>-->
-<!--          <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>-->
-<!--          <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>-->
-<!--          <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>-->
-<!--          <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>-->
-<!--          <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>-->
-<!--          <el-table-column prop="backBoltsNumber" label="背面螺栓数量"  :width="tableWidth[6]"/>-->
-<!--          <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>-->
-<!--          <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>-->
-<!--          <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>-->
-<!--          <el-table-column prop="panelSize" label="偏移量X" :width="tableWidth[10]"/>-->
-<!--          <el-table-column prop="panelSize" label="偏移量Y" :width="tableWidth[11]"/>-->
-<!--          <el-table-column prop="panelSize" label="偏移量Z" :width="tableWidth[12]"/>-->
-<!--          <el-table-column prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>-->
-<!--          <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>-->
-<!--        </el-table>-->
+    <!--      <el-main>-->
+    <!--        <el-table :data="tableData" stripe style="margin-left: -30px;">-->
+    <!--          <el-table-column prop="id" label="数据ID" :width="tableWidth[0]"/>-->
+    <!--          <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>-->
+    <!--          <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>-->
+    <!--          <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>-->
+    <!--          <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>-->
+    <!--          <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>-->
+    <!--          <el-table-column prop="backBoltsNumber" label="背面螺栓数量"  :width="tableWidth[6]"/>-->
+    <!--          <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>-->
+    <!--          <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>-->
+    <!--          <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>-->
+    <!--          <el-table-column prop="panelSize" label="偏移量X" :width="tableWidth[10]"/>-->
+    <!--          <el-table-column prop="panelSize" label="偏移量Y" :width="tableWidth[11]"/>-->
+    <!--          <el-table-column prop="panelSize" label="偏移量Z" :width="tableWidth[12]"/>-->
+    <!--          <el-table-column prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>-->
+    <!--          <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>-->
+    <!--        </el-table>-->
 
-<!--<br/>-->
-<!--  <el-row>-->
-<!--    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>-->
-<!--    <el-col :span="18">-->
-<!--      <el-pagination-->
-<!--            v-model:current-page="currentPage"-->
-<!--            v-model:page-size="pageSize"-->
-<!--            :small="small"-->
-<!--            :disabled="disabled"-->
-<!--            :background="background"-->
-<!--            layout="prev, pager, next, jumper"-->
-<!--            :total="1000"-->
-<!--            @size-change="handleSizeChange"-->
-<!--            @current-change="handleCurrentChange"-->
-<!--        />-->
-<!--    </el-col>-->
-<!--  </el-row>-->
+    <!--<br/>-->
+    <!--  <el-row>-->
+    <!--    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>-->
+    <!--    <el-col :span="18">-->
+    <!--      <el-pagination-->
+    <!--            v-model:current-page="currentPage"-->
+    <!--            v-model:page-size="pageSize"-->
+    <!--            :small="small"-->
+    <!--            :disabled="disabled"-->
+    <!--            :background="background"-->
+    <!--            layout="prev, pager, next, jumper"-->
+    <!--            :total="1000"-->
+    <!--            @size-change="handleSizeChange"-->
+    <!--            @current-change="handleCurrentChange"-->
+    <!--        />-->
+    <!--    </el-col>-->
+    <!--  </el-row>-->
 
-<!--      </el-main>-->
-<!--    </el-container>-->
+    <!--      </el-main>-->
+    <!--    </el-container>-->
   </div>
 </template>
 
@@ -441,6 +455,7 @@ const handleCurrentChange = (val: number) => {
   width: 96%;
   margin: 0 auto;
 }
+
 .el-pagination {
   text-align: center;
 }
