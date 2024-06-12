@@ -12,9 +12,14 @@ const routes = [
                 component: () => import('~/components/Loadfile.vue')
             },
             {
-                path: '/history',
-                name: 'filter',
-                component: () => import('~/components/FilterPage.vue')
+                path: '/historye',
+                name: 'filtere',
+                component: () => import('~/components/FilterPageE.vue')
+            },
+            {
+                path: '/historyr',
+                name: 'filterr',
+                component: () => import('~/components/FilterPageR.vue')
             },
         ]
     },
