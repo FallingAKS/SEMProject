@@ -4,6 +4,7 @@ const routes = [
     {
         path: '',
         name: 'Menu',
+        redirect: "/main",
         component: () => import('~/components/MainStructure.vue'),
         children: [
             {
@@ -16,6 +17,11 @@ const routes = [
                 name: 'filter',
                 component: () => import('~/components/FilterPage.vue')
             },
+            {
+                path: '/input',
+                name: 'inputTable',
+                component: () => import('~/components/InputTable.vue')
+            }
         ]
     },
     {

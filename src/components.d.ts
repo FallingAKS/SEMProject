@@ -23,6 +23,7 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FilterPage: typeof import('./components/FilterPage.vue')['default']
+    InputTable: typeof import('./components/InputTable.vue')['default']
     Loadfile: typeof import('./components/Loadfile.vue')['default']
     MainStructure: typeof import('./components/MainStructure.vue')['default']
     ResultPage: typeof import('./components/ResultPage.vue')['default']

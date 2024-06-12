@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import {
+  DocumentAdd,
   Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
   TurnOff,
 } from '@element-plus/icons-vue'
 import {useRouter} from "vue-router";
@@ -44,11 +42,17 @@ const selectHandler = (index: string) => {
       >
         <el-menu-item index="main">
           <el-icon>
-            <icon-menu/>
+            <DocumentAdd />
           </el-icon>
           <template #title>上传文件</template>
         </el-menu-item>
         <el-menu-item index="history">
+          <el-icon>
+            <document/>
+          </el-icon>
+          <template #title>查看历史结果</template>
+        </el-menu-item>
+        <el-menu-item index="input">
           <el-icon>
             <document/>
           </el-icon>

@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import {ArrowLeft} from '@element-plus/icons-vue'
-import {ref} from 'vue';
+import {
+  ref,
+  onMounted
+} from 'vue';
+import axiosInstance from "~/Axios/request";
+
+const onMounted = () => {
+  console.log('mounted')
+  // TODO: 当进入该页面时，从后端获取数据，赋值给tableData
+
+}
 
 const tableData = ref([
   {
