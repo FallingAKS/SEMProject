@@ -46,11 +46,17 @@ const selectHandler = (index: string) => {
           </el-icon>
           <template #title>上传文件</template>
         </el-menu-item>
-        <el-menu-item index="history">
+        <el-menu-item index="historye">
           <el-icon>
             <document/>
           </el-icon>
-          <template #title>查看历史结果</template>
+          <template #title>查看熵权法结果</template>
+        </el-menu-item>
+        <el-menu-item index="historyr">
+          <el-icon>
+            <document/>
+          </el-icon>
+          <template #title>查看粗糙集结果</template>
         </el-menu-item>
         <el-menu-item index="input">
           <el-icon>
