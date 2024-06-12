@@ -13,6 +13,7 @@ interface Data {
   stitchingWidth: number,
   panelSize: number,
   rresult: number,
+  tag: string
 }
 
 const tableRowClassName = (
@@ -43,7 +44,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Safe'
   },
   {
     id: 2,
@@ -56,7 +58,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Warning'
   },
   {
     id: 3,
@@ -69,7 +72,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Danger'
   },
   {
     id: 4,
@@ -82,7 +86,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Safe'
   },
   {
     id: 5,
@@ -95,7 +100,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Warning'
   },
   {
     id: 6,
@@ -108,7 +114,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Danger'
   },
   {
     id: 7,
@@ -121,7 +128,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Safe'
   },
   {
     id: 8,
@@ -134,7 +142,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Warning'
   },
   {
     id: 9,
@@ -147,7 +156,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Danger'
   },
   {
     id: 10,
@@ -160,7 +170,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Safe'
   },
   {
     id: 11,
@@ -173,7 +184,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Warning'
   },
   {
     id: 12,
@@ -186,7 +198,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Danger'
   },
   {
     id: 13,
@@ -199,7 +212,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Safe'
   },
   {
     id: 14,
@@ -212,7 +226,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Warning'
   },
   {
     id: 15,
@@ -225,7 +240,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Danger'
   },
   {
     id: 16,
@@ -238,7 +254,8 @@ const tableData: Data[] = [
     panelVerticality: 0.5,
     stitchingWidth: 0.5,
     panelSize: 0.5,
-    rresult: 0.5
+    rresult: 0.5,
+    tag: 'Safe'
   },
 ];
 
@@ -326,13 +343,16 @@ const options = [
 
 const tableWidth = ref(['70', '90', '90', '90', '90',
   '90', '90', '90', '90', '90',
-  '80', '80', '80', '100', '100'])
+  '80', '80', '80', '80', '100'])
 
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
 }
 const handleCurrentChange = (val: number) => {
   console.log(`current page: ${val}`)
+}
+const filterTag = (value: string, row: Data) => {
+  return row.tag === value
 }
 </script>
 
@@ -358,7 +378,28 @@ const handleCurrentChange = (val: number) => {
       <el-table :data="tableData" stripe
                 :row-class-name="tableRowClassName">
         <el-table-column prop="id" label="数据ID" :width="tableWidth[0]"/>
-        <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>
+        <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
+        <el-table-column
+            :width="tableWidth[14]"
+            prop="tag"
+            label="Tag"
+            width="100"
+            :filters="[
+        { text: 'Safe', value: 'Safe' },
+        { text: 'Warning', value: 'Warning' },
+        { text: 'Danger', value: 'Danger' }
+      ]"
+            :filter-method="filterTag"
+            filter-placement="bottom-end"
+        >
+          <template #default="scope">
+            <el-tag
+                :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
+                disable-transitions
+            >{{ scope.row.tag }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
         <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
         <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
@@ -423,7 +464,7 @@ const handleCurrentChange = (val: number) => {
     <!--          <el-table-column prop="panelSize" label="偏移量X" :width="tableWidth[10]"/>-->
     <!--          <el-table-column prop="panelSize" label="偏移量Y" :width="tableWidth[11]"/>-->
     <!--          <el-table-column prop="panelSize" label="偏移量Z" :width="tableWidth[12]"/>-->
-    <!--          <el-table-column prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>-->
+    <!--          <el-table-column prop="rresult" label="熵权法结果" :width="tableWidth[13]"/>-->
     <!--          <el-table-column prop="rresult" label="粗糙集结果" :width="tableWidth[14]"/>-->
     <!--        </el-table>-->
 
@@ -458,5 +499,13 @@ const handleCurrentChange = (val: number) => {
 
 .el-pagination {
   text-align: center;
+}
+
+.el-table .warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+
+.el-table .success-row {
+  --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 </style>
