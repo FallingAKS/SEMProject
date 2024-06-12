@@ -1,74 +1,124 @@
 <script setup lang="ts">
 import {ref} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
+import {
+  ElMessage,
+  ElMessageBox,
+  genFileId,
+  UploadRequestHandler,
+  UploadRequestOptions,
+  UploadUserFile
+} from 'element-plus'
+import {useRouter} from "vue-router";
+import {Plus} from '@element-plus/icons-vue'
+import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
+import axiosInstance from "~/Axios/request";
 
+const upload = ref<UploadInstance>()
+const fileList = ref<UploadUserFile[]>([])
+const router = useRouter()
 
-const progressHandler = (e: any) => {
-  console.log(e)
-  ElMessage.warning({
-    message: 'Congrats, this is a success message.',
-    type: 'success',
-  })
-}
-const failHandler = (e: any) => {
-  console.log(e)
-  ElMessage.error({
-    message: 'Sorry, this is an error message.',
-    type: 'error',
-  })
-}
-const successHandler = (e: any) => {
-  console.log(e)
-  ElMessage.success({
-    message: 'Congrats, this is a success message.',
-    type: 'success',
-  })
-}
-const exceedHandler = (e: any) => {
-  console.log(e)
-  ElMessageBox.alert('Sorry, this is an exceed message.', 'Warning', {
+const exceedHandler: UploadProps['onExceed'] = (files) => {
+  console.log(files)
+  ElMessageBox.alert('一次只能上传一个文件.', 'Warning', {
     confirmButtonText: 'OK',
   })
+
+  upload.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  upload.value!.handleStart(file)
 }
 
-
-const submitUpload = () => {
+// 用户确定上传
+const submitConfirm = () => {
   console.log('submitUpload')
+  upload.value!.submit()
 }
 
+// 上传前的文件格式检查
+const beforeDataUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  if (rawFile.type !== 'text/plain') {
+    ElMessage.error('数据必须以txt格式进行上传！')
+    return false
+  }
+
+  // TODO：其他文件的格式限制可以写在这里
+
+  return true
+}
+
+// 自定义上传
+const fileUpload = (options: UploadRequestOptions) => {
+  // 准备上传文件
+  // debugger
+  console.log(options)
+  const file = options.file;
+  const formData = new FormData();
+  formData.append("file", file);
+  axiosInstance.post('/data/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(res => {
+    console.log(res)
+    // 上传成功后的处理
+    if(res.data.code === 200) {
+      ElMessage.success({
+        message: '上传成功了好耶 from Axios.',
+        type: 'success',
+      })
+    }
+    else if(res.data.code === 400) {
+      ElMessage.error({
+        message: res.data.message + '-错误码：' + res.data.code,
+        type: 'error',
+      })
+    }
+
+  }, err => {
+    console.log(err)
+    // 出现错误时的处理
+    ElMessage.error({
+      message: err.data.message + '错误码：' + err.data.code,
+      type: 'error',
+    })
+  })
+}
 </script>
 
 <template>
   <div id="contentContainer" class="flex-content-around h-full">
     <div id="upLoaderContainer" class="flex-col" style="margin: auto; padding: 0 500px">
       <el-upload
+          ref="upload"
           class="avatar-uploader"
           drag
+          accept="text/plain"
+          action="/data/"
+          v-model:file-list="fileList"
           :show-file-list="true"
-          :on-progress="progressHandler"
-          :on-error="failHandler"
-          :on-success="successHandler"
           :on-exceed="exceedHandler"
-          accept="txt"
           :auto-upload="false"
+          :before-upload="beforeDataUpload"
+          :http-request="fileUpload"
           :limit="1"
-          action="#"
       >
         <template #trigger>
           <el-icon class="avatar-uploader-icon">
             <Plus/>
           </el-icon>
         </template>
-        <el-button class="ml-3" type="success" @click="submitUpload">
-          上传文件
-        </el-button>
         <template #tip>
           <div class="el-upload__tip">
             仅支持txt文件
           </div>
         </template>
       </el-upload>
+      <div class="bg-amber grow">
+        <el-button type="primary" round @click="submitConfirm">
+          上传文件
+        </el-button>
+      </div>
     </div>
   </div>
 </template>
