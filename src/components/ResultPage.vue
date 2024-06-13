@@ -6,6 +6,7 @@ import {
   onMounted
 } from 'vue';
 import {ElMessage} from "element-plus";
+import {reactive} from "@vue/reactivity";
 
 const tableData = ref([])
 
@@ -13,12 +14,44 @@ const tableWidth = ref(['70',
   '100', '100', '110', '100', '80', '80', '100', '102', '100', '70', '70', '70',
   '102', '100', '100'])
 
+    const option = reactive({
+      legend: {
+        // 图例
+        data: ["Safe", "Warning", "Danger"],
+        right: "10%",
+        top: "7%",
+        orient: "vertical"
+      },
+      title: {
+        // 设置饼图标题，位置设为顶部居中
+        text: "该批次下的安全汇总",
+        top: "0%",
+        left: "center"
+      },
+      color: ['#67C23A', '#E6A23C', '#F56C6C'],
+      series: [
+        {
+          type: "pie",
+          label: {
+            show: false,
+            formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
+          },
+          data: [
+            {value: 0, name: "Safe"},
+            {value: 0, name: "Warning"},
+            {value: 0, name: "Danger"}
+          ]
+        }
+      ]
+    });
+
 onMounted(async () => {
   try {
     const currentPath = window.location.pathname;
     console.log(currentPath);
     const value = currentPath.split('/')[2];
     console.log(value);
+
 
     tableData.value = [];
     const response = await axios.get('/data/batch_data?batch=' + value);
@@ -54,9 +87,28 @@ onMounted(async () => {
         Offset_y: data[i].Offset_y,
         Offset_z: data[i].Offset_z
       });
-
-      console.log(tableData.value[i]);
     }
+
+    let safe = 0;
+    let warning = 0;
+    let danger = 0;
+    for (let i = 0; i < tableData.value.length; i++) {
+      if (tableData.value[i].tag === 'Safe') {
+        safe++;
+      } else if (tableData.value[i].tag === 'Warning') {
+        warning++;
+      } else {
+        danger++;
+      }
+    }
+
+    option.series = {
+      data: [
+        {value: safe, name: "Safe"},
+        {value: warning, name: "Warning"},
+        {value: danger, name: "Danger"}
+      ]
+    } //这个是对的，网上不报错的方法是错的
 
 
   } catch (error) {
@@ -70,55 +122,61 @@ const filterTag = (value: string, row) => {
 </script>
 
 <template>
-  <div>
     <el-container>
       <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
         <el-button :icon="ArrowLeft" type="success" @click="$router.push('/main')">返回</el-button>
       </el-header>
 
       <el-main>
-        <el-table :data="tableData" stripe height="750" style="width: 100%">
-          <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
-          <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
-          <el-table-column fixed prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
-          <el-table-column fixed
-                           :width="tableWidth[14]"
-                           prop="tag"
-                           label="Tag"
-                           width="100"
-                           :filters="[
+        <el-row>
+          <el-col :span="18">
+            <el-table :data="tableData" stripe height="750" style="width: 100%">
+              <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
+              <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
+              <el-table-column fixed prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
+              <el-table-column fixed
+                               :width="tableWidth[14]"
+                               prop="tag"
+                               label="Tag"
+                               width="100"
+                               :filters="[
         { text: 'Safe', value: 'Safe' },
         { text: 'Warning', value: 'Warning' },
         { text: 'Danger', value: 'Danger' }
       ]"
-                           :filter-method="filterTag"
-                           filter-placement="bottom-end"
-          >
-            <template #default="scope">
-              <el-tag
-                  :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
-                  disable-transitions
-              >{{ scope.row.tag }}
-              </el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
-          <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
-          <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
-          <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>
-          <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>
-          <el-table-column prop="backBoltsNumber" label="背面螺栓数量" :width="tableWidth[6]"/>
-          <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
-          <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
-          <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
-          <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
-          <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
-          <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
-        </el-table>
+                               :filter-method="filterTag"
+                               filter-placement="bottom-end"
+              >
+                <template #default="scope">
+                  <el-tag
+                      :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
+                      disable-transitions
+                  >{{ scope.row.tag }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
+              <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
+              <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
+              <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>
+              <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>
+              <el-table-column prop="backBoltsNumber" label="背面螺栓数量" :width="tableWidth[6]"/>
+              <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
+              <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
+              <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
+              <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
+              <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
+              <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
+              <!--           "flatness", "stains", "cracks"-->
+            </el-table>
+          </el-col>
+          <el-col :span="6">
 
+            <v-chart :option="option" autoresize :loading="false"/>
+          </el-col>
+        </el-row>
       </el-main>
     </el-container>
-  </div>
 </template>
 
 <style scoped>

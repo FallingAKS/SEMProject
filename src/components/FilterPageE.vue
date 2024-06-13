@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
+import {reactive} from "@vue/reactivity";
 import axios from '~/Axios/request';
 import {ElMessage} from "element-plus";
 
@@ -22,12 +23,43 @@ onMounted(async () => {
     const response = await axios.get('/data/batch');
     const data = response.data.data;
     for (let i = 0; i < data.length; i++) {
-      options.value.push({ value: data[i], label: data[i] });
+      options.value.push({value: data[i], label: data[i]});
     }
     ElMessage.success('请选择批次');
   } catch (error) {
     ElMessage.error('获取数据失败');
   }
+});
+
+const option = reactive({
+  legend: {
+    // 图例
+    data: ["Safe", "Warning", "Danger"],
+    right: "10%",
+    top: "7%",
+    orient: "vertical"
+  },
+  title: {
+    // 设置饼图标题，位置设为顶部居中
+    text: "该批次下的安全汇总",
+    top: "0%",
+    left: "center"
+  },
+  color: ['#67C23A', '#E6A23C', '#F56C6C'],
+  series: [
+    {
+      type: "pie",
+      label: {
+        show: false,
+        formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
+      },
+      data: [
+        {value: 0, name: "Safe"},
+        {value: 0, name: "Warning"},
+        {value: 0, name: "Danger"}
+      ]
+    }
+  ]
 });
 
 const handleSelect = async (value) => {
@@ -67,22 +99,43 @@ const handleSelect = async (value) => {
         Offset_z: data[i].Offset_z
       });
     }
+
+    let safe = 0;
+    let warning = 0;
+    let danger = 0;
+    for (let i = 0; i < tableData.value.length; i++) {
+      if (tableData.value[i].tag === 'Safe') {
+        safe++;
+      } else if (tableData.value[i].tag === 'Warning') {
+        warning++;
+      } else {
+        danger++;
+      }
+    }
+
+    option.series={
+      data: [
+        {value: safe, name: "Safe"},
+        {value: warning, name: "Warning"},
+        {value: danger, name: "Danger"}
+      ]
+    } //这个是对的，网上不报错的方法是错的
+
   } catch (error) {
     ElMessage.error('获取结果失败');
   }
 };
-
 </script>
 
 <template>
   <div class="flex-col h-full w-full">
-    <div id="TopBar" style="flex: 2;">
+    <div id="TopBar" style="flex: 2; height: 40px;">
       <div class="grow" style="position: relative;"></div>
       <el-select
           v-model="value"
           placeholder="Select"
           size="large"
-          style="width: 20%; float: right; margin-right: 200px; margin-top: 10px; margin-bottom: 10px;"
+          style="width: 30%; float: right; margin-right: 200px; margin-top: 10px; margin-bottom: 10px;"
           @change="handleSelect"
       >
         <el-option
@@ -93,48 +146,52 @@ const handleSelect = async (value) => {
         />
       </el-select>
     </div>
-    <div id="content" style="flex: 8; padding: 30px">
-      <el-table :data="tableData" stripe height="750" style="width: 96%">
-        <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
-        <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
-        <el-table-column fixed
-                         :width="tableWidth[14]"
-                         prop="tag"
-                         label="Tag"
-                         width="100"
-                         :filters="[
+    <div id="content" style=" padding: 30px; position: relative;">
+      <div style="float: left; width: 62vw">
+        <el-table :data="tableData" stripe height="750" style="width: 100%">
+          <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
+          <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
+          <el-table-column fixed
+                           :width="tableWidth[14]"
+                           prop="tag"
+                           label="Tag"
+                           width="100"
+                           :filters="[
         { text: 'Safe', value: 'Safe' },
         { text: 'Warning', value: 'Warning' },
         { text: 'Danger', value: 'Danger' }
       ]"
-                         :filter-method="filterTag"
-                         filter-placement="bottom-end"
-        >
-          <template #default="scope">
-            <el-tag
-                :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
-                disable-transitions
-            >{{ scope.row.tag }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
-        <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
-        <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
-        <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>
-        <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>
-        <el-table-column prop="backBoltsNumber" label="背面螺栓数量" :width="tableWidth[6]"/>
-        <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
-        <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
-        <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
-        <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
-        <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
-        <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
-      </el-table>
+                           :filter-method="filterTag"
+                           filter-placement="bottom-end"
+          >
+            <template #default="scope">
+              <el-tag
+                  :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
+                  disable-transitions
+              >{{ scope.row.tag }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
+          <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
+          <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
+          <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>
+          <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>
+          <el-table-column prop="backBoltsNumber" label="背面螺栓数量" :width="tableWidth[6]"/>
+          <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
+          <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
+          <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
+          <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
+          <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
+          <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
+        </el-table>
+      </div>
+      <div style="width: 20vw; height: 50vh; float: right;">
+        <v-chart :option="option" autoresize :loading="false"/>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 </style>
