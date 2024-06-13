@@ -33,6 +33,11 @@ const routes = [
         path: '/result/:batchID',
         name: 'history',
         component: () => import('~/components/ResultPage.vue')
+    },
+    {
+        path: '/calculating/:batchID',
+        name: 'calculating',
+        component: () => import('~/components/Calculating.vue')
     }
 ]
 const router = createRouter({
