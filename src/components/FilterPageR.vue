@@ -22,7 +22,7 @@ onMounted(async () => {
     const response = await axios.get('/data/batch');
     const data = response.data.data;
     for (let i = 0; i < data.length; i++) {
-      options.value.push({ value: data[i], label: data[i] });
+      options.value.push({value: data[i], label: data[i]});
     }
     ElMessage.success('请选择批次');
   } catch (error) {
@@ -50,9 +50,9 @@ const handleSelect = async (value) => {
         eresult: data[i].eresult,
         rresult: data[i].rresult,
         tag: data[i].eresult == null ? 'Safe' :
-            (data[i].eresult < 0.5 ? 'Safe' :
-                (data[i].eresult < 0.7 ? 'Warning' :
-                    'Danger')),
+            (data[i].eresult < 0.3 ? 'Danger' :
+                (data[i].eresult < 0.5 ? 'Warning' :
+                    'Safe')),
         elasticityModulus: data[i].elasticityModulus,
         structuralAdhesiveStress: data[i].structuralAdhesiveStress,
         panelDamageArea: data[i].panelDamageArea,
