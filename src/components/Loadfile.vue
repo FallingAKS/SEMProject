@@ -6,7 +6,8 @@ import {
   genFileId,
   UploadRequestHandler,
   UploadRequestOptions,
-  UploadUserFile
+  UploadUserFile,
+  ElLoading
 } from 'element-plus'
 import {useRouter} from "vue-router";
 import {Plus} from '@element-plus/icons-vue'
@@ -55,11 +56,20 @@ const fileUpload = (options: UploadRequestOptions) => {
   const file = options.file;
   const formData = new FormData();
   formData.append("file", file);
+
+  // 加载动画
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在上传与计算中',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
   axiosInstance.post('/data/', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   }).then(res => {
+    // 关闭加载动画
+    loading.close()
     console.log(res)
     // 上传成功后的处理
     if(res.data.code === 200) {
@@ -67,6 +77,9 @@ const fileUpload = (options: UploadRequestOptions) => {
         message: '上传成功了好耶 from Axios.',
         type: 'success',
       })
+      // 跳转到结果页面
+      let batchId = res.data.data
+      router.push(`/result/${batchId}`)
     }
     else if(res.data.code === 400) {
       ElMessage.error({
@@ -76,6 +89,8 @@ const fileUpload = (options: UploadRequestOptions) => {
     }
 
   }, err => {
+    // 关闭加载动画
+    loading.close();
     console.log(err)
     // 出现错误时的处理
     ElMessage.error({

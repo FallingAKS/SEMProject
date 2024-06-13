@@ -2,15 +2,26 @@
 import {ArrowLeft} from '@element-plus/icons-vue'
 import {
   ref,
-  onMounted
+  onMounted,
 } from 'vue';
+import {useRouter} from "vue-router";
 import axiosInstance from "~/Axios/request";
 
-const onMounted = () => {
+const router = useRouter()
+const props = defineProps(['batchID']);
+
+onMounted(() => {
   console.log('mounted')
   // TODO: 当进入该页面时，从后端获取数据，赋值给tableData
+  const batchId = props.batchID
+  axiosInstance.get(`/data/batch_data`).then((res) => {
+    console.log(res.data)
 
-}
+  }).catch((err) => {
+    console.log(err)
+
+  })
+})
 
 const tableData = ref([
   {
