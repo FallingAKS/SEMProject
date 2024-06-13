@@ -74,12 +74,12 @@ const fileUpload = (options: UploadRequestOptions) => {
     // 上传成功后的处理
     if(res.data.code === 200) {
       ElMessage.success({
-        message: '上传成功了好耶 from Axios.',
-        type: 'success',
+        message: '上传成功!',
+        type: 'warn',
       })
       // 跳转到结果页面
-      let batchId = res.data.data
-      router.push(`/result/${batchId}`)
+      let batchID = res.data.data
+      router.push(`/result/${batchID}`)
     }
     else if(res.data.code === 400) {
       ElMessage.error({
@@ -129,7 +129,8 @@ const fileUpload = (options: UploadRequestOptions) => {
           </div>
         </template>
       </el-upload>
-      <div class="bg-amber grow">
+      <div class="flex">
+        <div class="grow"></div>
         <el-button type="primary" round @click="submitConfirm">
           上传文件
         </el-button>
