@@ -10,8 +10,8 @@ import {ElMessage} from "element-plus";
 const tableData = ref([])
 
 const tableWidth = ref(['70',
-  '100', '100', '110', '100', '80', '80', '100', '102', '100', '100', '100', '100',
-  '100', '100', '100'])
+  '100', '100', '110', '100', '80', '80', '100', '102', '100', '70', '70', '70',
+  '102', '100', '100'])
 
 onMounted(async () => {
   try {
@@ -36,6 +36,7 @@ onMounted(async () => {
       tableData.value.push({
         id: data[i].id,
         eresult: data[i].eresult,
+        rresult: data[i].rresult,
         tag: data[i].eresult == null ? 'Safe' :
             (data[i].eresult < 0.5 ? 'Safe' :
                 (data[i].eresult < 0.7 ? 'Warning' :
@@ -49,9 +50,12 @@ onMounted(async () => {
         panelVerticality: data[i].panelVerticality,
         stitchingWidth: data[i].stitchingWidth,
         panelSize: data[i].panelSize,
+        Offset_x: data[i].Offset_x,
+        Offset_y: data[i].Offset_y,
+        Offset_z: data[i].Offset_z
       });
 
-    console.log(tableData.value[i]);
+      console.log(tableData.value[i]);
     }
 
 
@@ -76,6 +80,7 @@ const filterTag = (value: string, row) => {
         <el-table :data="tableData" stripe height="750" style="width: 100%">
           <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
           <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
+          <el-table-column fixed prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
           <el-table-column fixed
                            :width="tableWidth[14]"
                            prop="tag"
@@ -106,9 +111,9 @@ const filterTag = (value: string, row) => {
           <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
           <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
           <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
-          <el-table-column prop="panelSize" label="偏移量X" :width="tableWidth[10]"/>
-          <el-table-column prop="panelSize" label="偏移量Y" :width="tableWidth[11]"/>
-          <el-table-column prop="panelSize" label="偏移量Z" :width="tableWidth[12]"/>
+          <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
+          <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
+          <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
         </el-table>
 
       </el-main>
