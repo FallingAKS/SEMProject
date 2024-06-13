@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import axios from 'axios';
+import axios from '~/Axios/request';
 import {ElMessage} from "element-plus";
 
 const tableData = ref([])
@@ -19,7 +19,7 @@ const filterTag = (value: string, row) => {
 //进入页面时请求数据
 onMounted(async () => {
   try {
-    const response = await axios.get('http://106.15.7.192:8000/data/batch');
+    const response = await axios.get('/data/batch');
     const data = response.data.data;
     for (let i = 0; i < data.length; i++) {
       options.value.push({ value: data[i], label: data[i] });
@@ -33,7 +33,7 @@ onMounted(async () => {
 const handleSelect = async (value) => {
   try {
     tableData.value = [];
-    const response = await axios.get('http://106.15.7.192:8000/evalu/eresult?batch=' + value);
+    const response = await axios.get('/evalu/eresult?batch=' + value);
     let preData = response.data
     let dataObject;
     if (typeof preData === 'string') {
