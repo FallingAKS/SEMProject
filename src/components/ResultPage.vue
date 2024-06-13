@@ -7,13 +7,15 @@ import {
 } from 'vue';
 import {ElMessage} from "element-plus";
 import {reactive} from "@vue/reactivity";
+import {useRouter} from "vue-router";
+const router = useRouter()
 
 const tableData = ref([])
 
 const tableWidth = ref(['70',
-  '100', '100', '110', '100', '80', '80', '100', '102', '100', '70', '70', '70',
-  '102', '100', '100'])
-
+  '100', '100', '110', '100', '80', '80', '100', '102', '100', '110', '110', '110',
+  '102', '100',
+  '110', '110', '110'])
     const option = reactive({
       legend: {
         // 图例
@@ -48,10 +50,7 @@ const tableWidth = ref(['70',
 onMounted(async () => {
   try {
     const currentPath = window.location.pathname;
-    console.log(currentPath);
     const value = currentPath.split('/')[2];
-    console.log(value);
-
 
     tableData.value = [];
     const response = await axios.get('/data/batch_data?batch=' + value);
@@ -85,7 +84,10 @@ onMounted(async () => {
         panelSize: data[i].panelSize,
         Offset_x: data[i].Offset_x,
         Offset_y: data[i].Offset_y,
-        Offset_z: data[i].Offset_z
+        Offset_z: data[i].Offset_z,
+      flatness: data[i].flatness,
+      stains: data[i].stains,
+      cracks: data[i].cracks
       });
     }
 
@@ -119,12 +121,16 @@ onMounted(async () => {
 const filterTag = (value: string, row) => {
   return row.tag === value
 }
+
+const toMain = () => {
+  router.push('/main')
+}
 </script>
 
 <template>
     <el-container>
       <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
-        <el-button :icon="ArrowLeft" type="success" @click="$router.push('/main')">返回</el-button>
+        <el-button :icon="ArrowLeft" type="success" @click="toMain">返回</el-button>
       </el-header>
 
       <el-main>
@@ -167,7 +173,9 @@ const filterTag = (value: string, row) => {
               <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
               <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
               <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
-              <!--           "flatness", "stains", "cracks"-->
+              <el-table-column prop="flatness" label="平整度" :width="tableWidth[15]"/>
+              <el-table-column prop="stains" label="污渍" :width="tableWidth[16]"/>
+              <el-table-column prop="cracks" label="裂缝" :width="tableWidth[17]"/>
             </el-table>
           </el-col>
           <el-col :span="6">

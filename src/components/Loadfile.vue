@@ -79,7 +79,8 @@ const fileUpload = (options: UploadRequestOptions) => {
       })
       // 跳转到结果页面
       let batchID = res.data.data
-      router.push(`/result/${batchID}`)
+
+      router.push(`/calculating/${batchID}`)
     }
     else if(res.data.code === 400) {
       ElMessage.error({
