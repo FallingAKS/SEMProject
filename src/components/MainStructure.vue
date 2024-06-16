@@ -4,6 +4,7 @@ import {
   DocumentAdd,
   Document,
   TurnOff,
+  EditPen,
 } from '@element-plus/icons-vue'
 import {useRouter} from "vue-router";
 
@@ -45,6 +46,12 @@ const selectHandler = (index: string) => {
             <DocumentAdd />
           </el-icon>
           <template #title>上传文件</template>
+        </el-menu-item>
+        <el-menu-item index="input">
+          <el-icon>
+            <EditPen />
+          </el-icon>
+          <template #title>输入上传</template>
         </el-menu-item>
         <el-menu-item index="historye">
           <el-icon>

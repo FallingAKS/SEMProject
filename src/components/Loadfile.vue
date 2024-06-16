@@ -129,6 +129,18 @@ const fileUpload = (options: UploadRequestOptions) => {
           </div>
         </template>
       </el-upload>
+      <div id="tip" class="bg-blend-color-dodge" style="margin: 20px 0px">
+        <el-card style="width: 100%" shadow="hover">
+          <el-text class="mx-1" size="large">txt文件注意事项：<br/><br/></el-text>
+          1. 首行必须为各个属性的属性名，可以复制粘贴下面的内容<br/>
+          <el-card style="margin: 5px; background: rgba(207,212,213,0.63)" shadow="always">
+            elasticityModulus structuralAdhesiveStress panelDamageArea structuralAdhesiveDamageLength connectorsNumber backBoltsNumber panelVerticality stitchingWidth panelSize Offset_x Offset_y Offset_z flatness stains cracks
+          </el-card>
+          2. 第二行开始每一行为一块幕墙的数据<br/>
+          3. 每一行包括若干数字，对应上述的属性，数字之间用空格隔开<br/>
+          4. 数字可以是正数、小数和负数
+        </el-card>
+      </div>
       <div class="flex">
         <div class="grow"></div>
         <el-button type="primary" round @click="submitConfirm">
