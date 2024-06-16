@@ -72,7 +72,7 @@ const fileUpload = (options: UploadRequestOptions) => {
     loading.close()
     console.log(res)
     // 上传成功后的处理
-    if(res.data.code === 200) {
+    if (res.data.code === 200) {
       ElMessage.success({
         message: '上传成功!',
         type: 'warn',
@@ -81,8 +81,7 @@ const fileUpload = (options: UploadRequestOptions) => {
       let batchID = res.data.data
 
       router.push(`/calculating/${batchID}`)
-    }
-    else if(res.data.code === 400) {
+    } else if (res.data.code === 400) {
       ElMessage.error({
         message: res.data.message + '-错误码：' + res.data.code,
         type: 'error',
