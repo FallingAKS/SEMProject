@@ -8,6 +8,7 @@ import {
 import {ElMessage} from "element-plus";
 import {reactive} from "@vue/reactivity";
 import {useRouter} from "vue-router";
+
 const router = useRouter()
 
 const tableData = ref([])
@@ -16,36 +17,36 @@ const tableWidth = ref(['70',
   '100', '100', '110', '100', '80', '80', '100', '102', '100', '110', '110', '110',
   '102', '100',
   '110', '110', '110'])
-    const option = reactive({
-      legend: {
-        // 图例
-        data: ["Safe", "Warning", "Danger"],
-        right: "10%",
-        top: "7%",
-        orient: "vertical"
+const option = reactive({
+  legend: {
+    // 图例
+    data: ["Safe", "Warning", "Danger"],
+    right: "10%",
+    top: "7%",
+    orient: "vertical"
+  },
+  title: {
+    // 设置饼图标题，位置设为顶部居中
+    text: "该批次下的安全汇总",
+    top: "0%",
+    left: "center"
+  },
+  color: ['#67C23A', '#E6A23C', '#F56C6C'],
+  series: [
+    {
+      type: "pie",
+      label: {
+        show: false,
+        formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
       },
-      title: {
-        // 设置饼图标题，位置设为顶部居中
-        text: "该批次下的安全汇总",
-        top: "0%",
-        left: "center"
-      },
-      color: ['#67C23A', '#E6A23C', '#F56C6C'],
-      series: [
-        {
-          type: "pie",
-          label: {
-            show: false,
-            formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
-          },
-          data: [
-            {value: 0, name: "Safe"},
-            {value: 0, name: "Warning"},
-            {value: 0, name: "Danger"}
-          ]
-        }
+      data: [
+        {value: 0, name: "Safe"},
+        {value: 0, name: "Warning"},
+        {value: 0, name: "Danger"}
       ]
-    });
+    }
+  ]
+});
 
 onMounted(async () => {
   try {
@@ -67,27 +68,27 @@ onMounted(async () => {
     for (let i = 0; i < data.length; i++) {
       tableData.value.push({
         id: data[i].id,
-        eresult: data[i].eresult,
-        rresult: data[i].rresult,
+        eresult: data[i].eresult.toFixed(2),
+        rresult: data[i].rresult.toFixed(2),
         tag: data[i].eresult == null ? 'Safe' :
             (data[i].eresult < 0.3 ? 'Danger' :
                 (data[i].eresult < 0.5 ? 'Warning' :
                     'Safe')),
-        elasticityModulus: data[i].elasticityModulus,
-        structuralAdhesiveStress: data[i].structuralAdhesiveStress,
-        panelDamageArea: data[i].panelDamageArea,
-        structuralAdhesiveDamageLength: data[i].structuralAdhesiveDamageLength,
+        elasticityModulus: data[i].elasticityModulus.toFixed(2),
+        structuralAdhesiveStress: data[i].structuralAdhesiveStress.toFixed(2),
+        panelDamageArea: data[i].panelDamageArea.toFixed(2),
+        structuralAdhesiveDamageLength: data[i].structuralAdhesiveDamageLength.toFixed(2),
         connectorsNumber: data[i].connectorsNumber,
         backBoltsNumber: data[i].backBoltsNumber,
-        panelVerticality: data[i].panelVerticality,
-        stitchingWidth: data[i].stitchingWidth,
-        panelSize: data[i].panelSize,
-        Offset_x: data[i].Offset_x,
-        Offset_y: data[i].Offset_y,
-        Offset_z: data[i].Offset_z,
-      flatness: data[i].flatness,
-      stains: data[i].stains,
-      cracks: data[i].cracks
+        panelVerticality: data[i].panelVerticality.toFixed(2),
+        stitchingWidth: data[i].stitchingWidth.toFixed(2),
+        panelSize: data[i].panelSize.toFixed(2),
+        Offset_x: data[i].Offset_x.toFixed(2),
+        Offset_y: data[i].Offset_y.toFixed(2),
+        Offset_z: data[i].Offset_z.toFixed(2),
+        flatness: data[i].flatness.toFixed(2),
+        stains: data[i].stains.toFixed(2),
+        cracks: data[i].cracks.toFixed(2)
       });
     }
 
@@ -128,63 +129,63 @@ const toMain = () => {
 </script>
 
 <template>
-    <el-container>
-      <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
-        <el-button :icon="ArrowLeft" type="success" @click="toMain">返回</el-button>
-      </el-header>
+  <el-container>
+    <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
+      <el-button :icon="ArrowLeft" type="success" @click="toMain">返回</el-button>
+    </el-header>
 
-      <el-main>
-        <el-row>
-          <el-col :span="18">
-            <el-table :data="tableData" stripe height="750" style="width: 100%">
-              <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
-              <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
-              <el-table-column fixed prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
-              <el-table-column fixed
-                               :width="tableWidth[14]"
-                               prop="tag"
-                               label="Tag"
-                               width="100"
-                               :filters="[
+    <el-main>
+      <el-row>
+        <el-col :span="18">
+          <el-table :data="tableData" stripe height="750" style="width: 100%">
+            <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
+            <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
+            <el-table-column fixed prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
+            <el-table-column fixed
+                             :width="tableWidth[14]"
+                             prop="tag"
+                             label="Tag"
+                             width="100"
+                             :filters="[
         { text: 'Safe', value: 'Safe' },
         { text: 'Warning', value: 'Warning' },
         { text: 'Danger', value: 'Danger' }
       ]"
-                               :filter-method="filterTag"
-                               filter-placement="bottom-end"
-              >
-                <template #default="scope">
-                  <el-tag
-                      :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
-                      disable-transitions
-                  >{{ scope.row.tag }}
-                  </el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
-              <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
-              <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
-              <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>
-              <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>
-              <el-table-column prop="backBoltsNumber" label="背面螺栓数量" :width="tableWidth[6]"/>
-              <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
-              <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
-              <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
-              <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
-              <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
-              <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
-              <el-table-column prop="flatness" label="平整度" :width="tableWidth[15]"/>
-              <el-table-column prop="stains" label="污渍" :width="tableWidth[16]"/>
-              <el-table-column prop="cracks" label="裂缝" :width="tableWidth[17]"/>
-            </el-table>
-          </el-col>
-          <el-col :span="6">
+                             :filter-method="filterTag"
+                             filter-placement="bottom-end"
+            >
+              <template #default="scope">
+                <el-tag
+                    :type="scope.row.tag === 'Safe' ? 'success' : (scope.row.tag === 'Warning' ? 'warning' : 'danger')"
+                    disable-transitions
+                >{{ scope.row.tag }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="elasticityModulus" label="弹性模量" :width="tableWidth[1]"/>
+            <el-table-column prop="structuralAdhesiveStress" label="结构胶应力" :width="tableWidth[2]"/>
+            <el-table-column prop="panelDamageArea" label="面板损伤面积" :width="tableWidth[3]"/>
+            <el-table-column prop="structuralAdhesiveDamageLength" label="结构胶损伤长度" :width="tableWidth[4]"/>
+            <el-table-column prop="connectorsNumber" label="连接件数量" :width="tableWidth[5]"/>
+            <el-table-column prop="backBoltsNumber" label="背面螺栓数量" :width="tableWidth[6]"/>
+            <el-table-column prop="panelVerticality" label="面板垂直度" :width="tableWidth[7]"/>
+            <el-table-column prop="stitchingWidth" label="拼缝宽度" :width="tableWidth[8]"/>
+            <el-table-column prop="panelSize" label="面板尺寸" :width="tableWidth[9]"/>
+            <el-table-column prop="Offset_x" label="偏移量X" :width="tableWidth[10]"/>
+            <el-table-column prop="Offset_y" label="偏移量Y" :width="tableWidth[11]"/>
+            <el-table-column prop="Offset_z" label="偏移量Z" :width="tableWidth[12]"/>
+            <el-table-column prop="flatness" label="平整度" :width="tableWidth[15]"/>
+            <el-table-column prop="stains" label="污渍" :width="tableWidth[16]"/>
+            <el-table-column prop="cracks" label="裂缝" :width="tableWidth[17]"/>
+          </el-table>
+        </el-col>
+        <el-col :span="6">
 
-            <v-chart :option="option" autoresize :loading="false"/>
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
+          <v-chart :option="option" autoresize :loading="false"/>
+        </el-col>
+      </el-row>
+    </el-main>
+  </el-container>
 </template>
 
 <style scoped>

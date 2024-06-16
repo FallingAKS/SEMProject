@@ -80,27 +80,27 @@ const handleSelect = async (value) => {
     for (let i = 0; i < data.length; i++) {
       tableData.value.push({
         id: data[i].id,
-        eresult: data[i].eresult,
-        rresult: data[i].rresult,
+        eresult: data[i].eresult.toFixed(2),
+        rresult: data[i].rresult.toFixed(2),
         tag: data[i].eresult == null ? 'Safe' :
             (data[i].eresult < 0.3 ? 'Danger' :
                 (data[i].eresult < 0.5 ? 'Warning' :
                     'Safe')),
-        elasticityModulus: data[i].elasticityModulus,
-        structuralAdhesiveStress: data[i].structuralAdhesiveStress,
-        panelDamageArea: data[i].panelDamageArea,
-        structuralAdhesiveDamageLength: data[i].structuralAdhesiveDamageLength,
+        elasticityModulus: data[i].elasticityModulus.toFixed(2),
+        structuralAdhesiveStress: data[i].structuralAdhesiveStress.toFixed(2),
+        panelDamageArea: data[i].panelDamageArea.toFixed(2),
+        structuralAdhesiveDamageLength: data[i].structuralAdhesiveDamageLength.toFixed(2),
         connectorsNumber: data[i].connectorsNumber,
         backBoltsNumber: data[i].backBoltsNumber,
-        panelVerticality: data[i].panelVerticality,
-        stitchingWidth: data[i].stitchingWidth,
-        panelSize: data[i].panelSize,
-        Offset_x: data[i].Offset_x,
-        Offset_y: data[i].Offset_y,
-        Offset_z: data[i].Offset_z,
-        flatness: data[i].flatness,
-        stains: data[i].stains,
-        cracks: data[i].cracks
+        panelVerticality: data[i].panelVerticality.toFixed(2),
+        stitchingWidth: data[i].stitchingWidth.toFixed(2),
+        panelSize: data[i].panelSize.toFixed(2),
+        Offset_x: data[i].Offset_x.toFixed(2),
+        Offset_y: data[i].Offset_y.toFixed(2),
+        Offset_z: data[i].Offset_z.toFixed(2),
+        flatness: data[i].flatness.toFixed(2),
+        stains: data[i].stains.toFixed(2),
+        cracks: data[i].cracks.toFixed(2)
       });
     }
 
