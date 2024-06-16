@@ -8,44 +8,60 @@ import {
 import {ElMessage} from "element-plus";
 import {reactive} from "@vue/reactivity";
 import {useRouter} from "vue-router";
+import {ECharts, EChartsOption, init} from 'echarts';
+
 const router = useRouter()
-
 const tableData = ref([])
-
 const tableWidth = ref(['70',
   '100', '100', '110', '100', '80', '80', '100', '102', '100', '110', '110', '110',
   '102', '100',
   '110', '110', '110'])
-    const option = reactive({
-      legend: {
-        // 图例
-        data: ["Safe", "Warning", "Danger"],
-        right: "10%",
-        top: "7%",
-        orient: "vertical"
+const option = ref({
+  legend: {
+    // 图例
+    data: ["Safe", "Warning", "Danger"],
+    right: "10%",
+    top: "7%",
+    orient: "vertical"
+  },
+  title: {
+    // 设置饼图标题，位置设为顶部居中
+    text: "该批次下的安全汇总",
+    top: "0%",
+    left: "center"
+  },
+  color: ['#67C23A', '#E6A23C', '#F56C6C'],
+  series: [
+    {
+      type: "pie",
+      label: {
+        show: false,
+        formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
       },
-      title: {
-        // 设置饼图标题，位置设为顶部居中
-        text: "该批次下的安全汇总",
-        top: "0%",
-        left: "center"
-      },
-      color: ['#67C23A', '#E6A23C', '#F56C6C'],
-      series: [
-        {
-          type: "pie",
-          label: {
-            show: false,
-            formatter: "{b} : {c} ({d}%)" // b代表名称，c代表对应值，d代表百分比
-          },
-          data: [
-            {value: 0, name: "Safe"},
-            {value: 0, name: "Warning"},
-            {value: 0, name: "Danger"}
-          ]
-        }
+      data: [
+        {value: 0, name: "Safe"},
+        {value: 0, name: "Warning"},
+        {value: 0, name: "Danger"}
       ]
-    });
+    }
+  ]
+});
+
+// 弹窗相关变量与函数
+const centerDialogVisible = ref(false)
+const echartContainer = ref(null)
+// 弹窗后渲染echarts
+const checkChart = () => {
+  // centerDialogVisible.value = true
+
+  console.log(echartContainer.value)
+  // 初始化echarts对象
+  const myChart = init(echartContainer.value as HTMLDivElement)
+
+  console.log(option.value)
+  myChart.setOption(option.value)
+
+}
 
 onMounted(async () => {
   try {
@@ -104,7 +120,7 @@ onMounted(async () => {
       }
     }
 
-    option.series = {
+    option.value.series = {
       data: [
         {value: safe, name: "Safe"},
         {value: warning, name: "Warning"},
@@ -122,6 +138,8 @@ const filterTag = (value: string, row) => {
   return row.tag === value
 }
 
+
+
 const toMain = () => {
   router.push('/main')
 }
@@ -131,6 +149,7 @@ const toMain = () => {
     <el-container>
       <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
         <el-button :icon="ArrowLeft" type="success" @click="toMain">返回</el-button>
+        <el-button type="primary" plain @click="centerDialogVisible=!centerDialogVisible">查看统计信息</el-button>
       </el-header>
 
       <el-main>
@@ -178,13 +197,34 @@ const toMain = () => {
               <el-table-column prop="cracks" label="裂缝" :width="tableWidth[17]"/>
             </el-table>
           </el-col>
-          <el-col :span="6">
+<!--          <el-col :span="6">-->
 
-            <v-chart :option="option" autoresize :loading="false"/>
-          </el-col>
+<!--            <v-chart :option="option" autoresize :loading="false"/>-->
+<!--          </el-col>-->
         </el-row>
       </el-main>
     </el-container>
+  <el-dialog
+      v-model="centerDialogVisible"
+      title="Warning"
+      width="500"
+      align-center
+      @opened="checkChart"
+      destroy-on-close
+  >
+    <div id="echart-container" ref="echartContainer">
+      <!-- 代码中进行echart初始化和渲染 -->
+      ???
+    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="centerDialogVisible = false">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>
