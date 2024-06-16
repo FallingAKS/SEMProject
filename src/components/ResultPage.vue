@@ -126,17 +126,20 @@ const filterTag = (value: string, row) => {
 const toMain = () => {
   router.push('/main')
 }
+
+const blockVisible = ref(false)
 </script>
 
 <template>
   <el-container>
     <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
       <el-button :icon="ArrowLeft" type="success" @click="toMain">返回</el-button>
+      <el-button type="primary" @click="blockVisible=true">显示安全汇总</el-button>
     </el-header>
 
     <el-main>
       <el-row>
-        <el-col :span="18">
+        <el-col :span="24">
           <el-table :data="tableData" stripe height="750" style="width: 100%">
             <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
             <el-table-column fixed prop="eresult" label="熵权法结果" :width="tableWidth[13]"/>
@@ -179,13 +182,18 @@ const toMain = () => {
             <el-table-column prop="cracks" label="裂缝" :width="tableWidth[17]"/>
           </el-table>
         </el-col>
-        <el-col :span="6">
-
-          <v-chart :option="option" autoresize :loading="false"/>
-        </el-col>
       </el-row>
     </el-main>
   </el-container>
+  <div v-show="blockVisible" style="position: absolute; width: 500px; height: 600px; left: calc(50% - 250px); top: calc(50% - 300px);
+  background: rgba(225,246,255,0.9); padding-top: 30px;border-radius: 30px; z-index: 999; border: solid black 1px;">
+    <div style="width: 500px; height: 530px;">
+      <v-chart :option="option" autoresize :loading="false"/>
+    </div>
+    <div style="padding-left: 222px">
+      <el-button type="primary" @click="blockVisible=false">关闭</el-button>
+    </div>
+  </div>
 </template>
 
 <style scoped>

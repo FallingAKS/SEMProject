@@ -129,12 +129,14 @@ const handleSelect = async (value) => {
   }
 };
 
+const blockVisible = ref(false)
 </script>
 
 <template>
   <div class="flex-col h-full w-full">
     <div id="TopBar" style="flex: 2; height: 40px;">
       <div class="grow" style="position: relative;"></div>
+      <el-button type="primary" @click="blockVisible=true" style="margin-top: 15px; margin-left: 30px;">显示安全汇总</el-button>
       <el-select
           v-model="value"
           placeholder="Select"
@@ -151,7 +153,7 @@ const handleSelect = async (value) => {
       </el-select>
     </div>
     <div id="content" style=" padding: 30px; position: relative;">
-      <div style="float: left; width: 62vw">
+      <div style="float: left; width: 82vw">
         <el-table :data="tableData" stripe height="750" style="width: 100%">
           <el-table-column fixed prop="id" label="数据ID" :width="tableWidth[0]"/>
           <el-table-column fixed prop="rresult" label="粗糙集结果" :width="tableWidth[13]"/>
@@ -193,9 +195,15 @@ const handleSelect = async (value) => {
           <el-table-column prop="cracks" label="裂缝" :width="tableWidth[17]"/>
         </el-table>
       </div>
-      <div style="width: 20vw; height: 50vh; float: right;">
-        <v-chart :option="option" autoresize :loading="false"/>
-      </div>
+    </div>
+  </div>
+  <div v-show="blockVisible" style="position: absolute; width: 500px; height: 600px; left: calc(50% - 250px); top: calc(50% - 300px);
+  background: rgba(225,246,255,0.9); padding-top: 30px;border-radius: 30px; z-index: 999; border: solid black 1px;">
+    <div style="width: 500px; height: 530px;">
+      <v-chart :option="option" autoresize :loading="false"/>
+    </div>
+    <div style="padding-left: 222px">
+      <el-button type="primary" @click="blockVisible=false">关闭</el-button>
     </div>
   </div>
 </template>
