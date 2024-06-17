@@ -35,16 +35,7 @@ onMounted(async () => {
         router.push('/main')
       }, 2000)
     }
-
-    while (true) {
-      response = await axios.get('/data/batch_data?batch=' + batchID)
-      if (response.data.data[0].eresult != null && response.data.data[0].rresult != null) {
-        // 计算完成
-        await router.push('/result/' + batchID)
-      }
-      setTimeout(() => {
-      }, 500)
-    }
+    router.push('/result/' + batchID)
 
   } catch (err) {
     ElMessage.error(err.data.message + '错误码：' + err.data.code)
