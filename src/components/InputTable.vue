@@ -175,7 +175,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style scoped>
 .content {
   padding: 20px;
   /deep/ .el-form-item {
