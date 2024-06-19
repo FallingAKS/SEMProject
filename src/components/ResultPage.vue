@@ -10,8 +10,12 @@ import {reactive} from "@vue/reactivity";
 import {useRouter} from "vue-router";
 
 const router = useRouter()
-
 const tableData = ref([])
+
+// 上下阙值
+const lower_value = ref(0.3)
+const upper_value = ref(0.5)
+const valueDialogVisible = ref(false)
 
 const tableWidth = ref(['70',
   '100', '100', '110', '100', '80', '80', '100', '102', '100', '110', '110', '110',
@@ -71,8 +75,8 @@ onMounted(async () => {
         eresult: data[i].eresult.toFixed(2),
         rresult: data[i].rresult.toFixed(2),
         tag: data[i].eresult == null ? 'Safe' :
-            (data[i].eresult < 0.3 ? 'Danger' :
-                (data[i].eresult < 0.5 ? 'Warning' :
+            (data[i].eresult < lower_value.value ? 'Danger' :
+                (data[i].eresult < upper_value.value ? 'Warning' :
                     'Safe')),
         elasticityModulus: data[i].elasticityModulus.toFixed(2),
         structuralAdhesiveStress: data[i].structuralAdhesiveStress.toFixed(2),
@@ -135,6 +139,7 @@ const blockVisible = ref(false)
     <el-header style="height: 40px; margin-top: 10px; margin-bottom: -10px;">
       <el-button :icon="ArrowLeft" type="success" @click="toMain">返回</el-button>
       <el-button type="primary" @click="blockVisible=true">显示安全汇总</el-button>
+      <el-button plain @click="valueDialogVisible = true">阙值调整</el-button>
     </el-header>
 
     <el-main>
@@ -194,6 +199,23 @@ const blockVisible = ref(false)
       <el-button type="primary" @click="blockVisible=false">关闭</el-button>
     </div>
   </div>
+  <el-dialog v-model="valueDialogVisible" title="阙值调整" width="500" center>
+    <template #header>
+      下阙值啊哈哈哈
+    </template>
+    <span>
+      <el-slider v-model="upper_value" :max="1" :min="lower_value" show-input/>
+      <el-slider v-model="lower_value" :max="upper_value" :min="0" show-input/>
+    </span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="centerDialogVisible = false">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>

@@ -47,12 +47,12 @@ const selectHandler = (index: string) => {
           </el-icon>
           <template #title>上传文件</template>
         </el-menu-item>
-        <el-menu-item index="input">
-          <el-icon>
-            <EditPen />
-          </el-icon>
-          <template #title>输入上传</template>
-        </el-menu-item>
+<!--        <el-menu-item index="input">-->
+<!--          <el-icon>-->
+<!--            <EditPen />-->
+<!--          </el-icon>-->
+<!--          <template #title>输入上传</template>-->
+<!--        </el-menu-item>-->
         <el-menu-item index="historye">
           <el-icon>
             <document/>

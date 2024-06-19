@@ -2,7 +2,7 @@
 import {onMounted, ref} from 'vue';
 import {reactive} from "@vue/reactivity";
 import axios from '~/Axios/request';
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const tableData = ref([])
 
@@ -63,6 +63,58 @@ const option = reactive({
   ]
 });
 
+// 上下阙值
+const lower_value = ref(0.3)
+const upper_value = ref(0.5)
+const tmp_lower_value = ref(0.3)
+const tmp_upper_value = ref(0.5)
+const valueDialogVisible = ref(false)
+const isModified = ref(false)
+
+// 记录滑块更新状态
+const modifiedCheck = () => {
+  isModified.value = true;
+}
+
+// 退出时检查是否有修改
+const closeValueDialog = () => {
+  if (isModified.value) {
+    ElMessageBox.confirm(
+        '你有为保存的上下阙值调整，要退出吗',
+        'Warning',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+    )
+        .then(() => {
+          valueDialogVisible.value = false;
+        })
+        .catch(() => {
+          // 不做任何
+        })
+  } else {
+    valueDialogVisible.value = false;
+  }
+}
+
+// 确认更新上下阙值
+const modifiedConfirm = () => {
+  lower_value.value = tmp_lower_value.value;
+  upper_value.value = tmp_upper_value.value;
+  valueDialogVisible.value = false;
+}
+
+// 打开对话框时，更新slider的值
+const openValueDialog = () => {
+  tmp_lower_value.value = lower_value.value;
+  tmp_upper_value.value = upper_value.value;
+}
+const handleValueDialogCloser = () => {
+  closeValueDialog()
+}
+
 const handleSelect = async (value) => {
   try {
     tableData.value = [];
@@ -83,8 +135,8 @@ const handleSelect = async (value) => {
         eresult: data[i].eresult.toFixed(2),
         rresult: data[i].rresult.toFixed(2),
         tag: data[i].eresult == null ? 'Safe' :
-            (data[i].eresult < 0.3 ? 'Danger' :
-                (data[i].eresult < 0.5 ? 'Warning' :
+            (data[i].eresult < lower_value.value ? 'Danger' :
+                (data[i].eresult < upper_value.value ? 'Warning' :
                     'Safe')),
         elasticityModulus: data[i].elasticityModulus.toFixed(2),
         structuralAdhesiveStress: data[i].structuralAdhesiveStress.toFixed(2),
@@ -137,7 +189,10 @@ const blockVisible = ref(false)
   <div class="flex-col h-full w-full">
     <div id="TopBar" style="flex: 2; height: 40px;">
       <div class="grow" style="position: relative;"></div>
-      <el-button type="primary" @click="blockVisible=true" style="margin-top: 15px; margin-left: 30px;">显示安全汇总</el-button>
+      <el-button type="primary" @click="blockVisible=true" style="margin-top: 15px; margin-left: 30px;">显示安全汇总
+      </el-button>
+      <el-button plain @click="valueDialogVisible = true" style="margin-top: 15px; margin-left: 10px;">阙值调整
+      </el-button>
       <el-select
           v-model="value"
           placeholder="Select"
@@ -207,7 +262,54 @@ const blockVisible = ref(false)
       <el-button type="primary" @click="blockVisible=false">关闭</el-button>
     </div>
   </div>
+  <el-dialog v-model="valueDialogVisible" title="阙值调整" width="500" center @open="openValueDialog"
+             :before-close="handleValueDialogCloser">
+    <template #header>
+      阙值调整
+    </template>
+    <span>
+      <div class="slider-demo-block">
+        <span class="demonstration">下阙值</span>
+        <el-slider v-model="tmp_lower_value" :max="tmp_upper_value" :min="0" :step="0.01" show-input @input="modifiedCheck"/>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">上阙值</span>
+        <el-slider v-model="tmp_upper_value" :max="1" :min="tmp_lower_value" :step="0.01" show-input @input="modifiedCheck"/>
+      </div>
+    </span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="closeValueDialog">Cancel</el-button>
+        <el-button type="primary" @click="modifiedConfirm">Confirm</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>
+.slider-demo-block {
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+}
+
+.slider-demo-block .el-slider {
+  margin-top: 0;
+  margin-left: 6px;
+}
+
+.slider-demo-block .demonstration {
+  font-size: 14px;
+  color: var(--el-text-color-secondary);
+  line-height: 44px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.slider-demo-block .demonstration + .el-slider {
+  flex: 0 0 70%;
+}
 </style>
