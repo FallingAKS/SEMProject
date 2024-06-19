@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import {reactive} from "@vue/reactivity";
 import axios from '~/Axios/request';
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -70,6 +70,15 @@ const tmp_lower_value = ref(0.3)
 const tmp_upper_value = ref(0.5)
 const valueDialogVisible = ref(false)
 const isModified = ref(false)
+
+watch([lower_value, upper_value], () => {
+  tableData.value.forEach(row => {
+    row.tag = row.eresult == null ? 'Safe' :
+      (row.eresult < lower_value.value ? 'Danger' :
+        (row.eresult < upper_value.value ? 'Warning' :
+          'Safe'));
+  });
+})
 
 // 记录滑块更新状态
 const modifiedCheck = () => {
