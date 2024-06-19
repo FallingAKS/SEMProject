@@ -3,7 +3,8 @@ import {ArrowLeft} from '@element-plus/icons-vue'
 import axios from '~/Axios/request';
 import {
   ref,
-  onMounted
+  onMounted,
+  watch,
 } from 'vue';
 import {ElMessage} from "element-plus";
 import {reactive} from "@vue/reactivity";
@@ -16,6 +17,15 @@ const tableData = ref([])
 const lower_value = ref(0.3)
 const upper_value = ref(0.5)
 const valueDialogVisible = ref(false)
+
+watch([lower_value, upper_value], () => {
+  tableData.value.forEach(row => {
+    row.tag = row.eresult == null ? 'Safe' :
+      (row.eresult < lower_value.value ? 'Danger' :
+        (row.eresult < upper_value.value ? 'Warning' :
+          'Safe'));
+  });
+})
 
 const tableWidth = ref(['70',
   '100', '100', '110', '100', '80', '80', '100', '102', '100', '110', '110', '110',
@@ -201,20 +211,12 @@ const blockVisible = ref(false)
   </div>
   <el-dialog v-model="valueDialogVisible" title="阙值调整" width="500" center>
     <template #header>
-      下阙值啊哈哈哈
+      阙值调整（上面为上阙值，下面为下阙值）
     </template>
     <span>
-      <el-slider v-model="upper_value" :max="1" :min="lower_value" show-input/>
-      <el-slider v-model="lower_value" :max="upper_value" :min="0" show-input/>
+      <el-slider v-model="upper_value" :max="1" :min="lower_value" :step="0.01" show-input/>
+      <el-slider v-model="lower_value" :max="upper_value" :min="0" :step="0.01" show-input/>
     </span>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">
-          Confirm
-        </el-button>
-      </div>
-    </template>
   </el-dialog>
 </template>
 
