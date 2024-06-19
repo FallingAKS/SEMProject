@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig, AxiosInstance, AxiosResponse } from 
 import {ElMessage} from 'element-plus'
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: 'http://106.15.7.192:8000',
+    baseURL: 'http://111.231.168.12:8866',
     timeout: 5000,
 });
 
