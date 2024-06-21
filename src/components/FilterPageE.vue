@@ -74,10 +74,31 @@ const isModified = ref(false)
 watch([lower_value, upper_value], () => {
   tableData.value.forEach(row => {
     row.tag = row.eresult == null ? 'Safe' :
-      (row.eresult < lower_value.value ? 'Danger' :
-        (row.eresult < upper_value.value ? 'Warning' :
-          'Safe'));
+        (row.eresult < lower_value.value ? 'Danger' :
+            (row.eresult < upper_value.value ? 'Warning' :
+                'Safe'));
   });
+
+  let safe = 0;
+  let warning = 0;
+  let danger = 0;
+  for (let i = 0; i < tableData.value.length; i++) {
+    if (tableData.value[i].tag === 'Safe') {
+      safe++;
+    } else if (tableData.value[i].tag === 'Warning') {
+      warning++;
+    } else {
+      danger++;
+    }
+  }
+
+  option.series = {
+    data: [
+      {value: safe, name: "Safe"},
+      {value: warning, name: "Warning"},
+      {value: danger, name: "Danger"}
+    ]
+  } //这个是对的，网上不报错的方法是错的
 })
 
 // 记录滑块更新状态
@@ -279,11 +300,13 @@ const blockVisible = ref(false)
     <span>
       <div class="slider-demo-block">
         <span class="demonstration">下阙值</span>
-        <el-slider v-model="tmp_lower_value" :max="tmp_upper_value" :min="0" :step="0.01" show-input @input="modifiedCheck"/>
+        <el-slider v-model="tmp_lower_value" :max="tmp_upper_value" :min="0" :step="0.01" show-input
+                   @input="modifiedCheck"/>
       </div>
       <div class="slider-demo-block">
         <span class="demonstration">上阙值</span>
-        <el-slider v-model="tmp_upper_value" :max="1" :min="tmp_lower_value" :step="0.01" show-input @input="modifiedCheck"/>
+        <el-slider v-model="tmp_upper_value" :max="1" :min="tmp_lower_value" :step="0.01" show-input
+                   @input="modifiedCheck"/>
       </div>
     </span>
     <template #footer>

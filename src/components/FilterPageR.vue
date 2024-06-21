@@ -78,6 +78,27 @@ watch([lower_value, upper_value], () => {
             (row.eresult < upper_value.value ? 'Warning' :
                 'Safe'));
   });
+
+  let safe = 0;
+  let warning = 0;
+  let danger = 0;
+  for (let i = 0; i < tableData.value.length; i++) {
+    if (tableData.value[i].tag === 'Safe') {
+      safe++;
+    } else if (tableData.value[i].tag === 'Warning') {
+      warning++;
+    } else {
+      danger++;
+    }
+  }
+
+  option.series = {
+    data: [
+      {value: safe, name: "Safe"},
+      {value: warning, name: "Warning"},
+      {value: danger, name: "Danger"}
+    ]
+  } //这个是对的，网上不报错的方法是错的
 })
 
 // 记录滑块更新状态
