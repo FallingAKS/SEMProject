@@ -232,11 +232,17 @@ const blockVisible = ref(false)
   </div>
   <el-dialog v-model="valueDialogVisible" title="阙值调整" width="500" center>
     <template #header>
-      阙值调整（上面为上阙值，下面为下阙值）
+      阙值调整
     </template>
     <span>
-      <el-slider v-model="upper_value" :max="1" :min="lower_value" :step="0.01" show-input/>
-      <el-slider v-model="lower_value" :max="upper_value" :min="0" :step="0.01" show-input/>
+      <div class="slider-demo-block">
+        <span class="demonstration">下阙值</span>
+        <el-slider v-model="lower_value" :max="upper_value" :min="0" :step="0.01" show-input/>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">上阙值</span>
+        <el-slider v-model="upper_value" :max="1" :min="lower_value" :step="0.01" show-input/>
+      </div>
     </span>
   </el-dialog>
 </template>
