@@ -138,7 +138,8 @@ const fileUpload = (options: UploadRequestOptions) => {
           </el-card>
           2. 第二行开始每一行为一块幕墙的数据<br/>
           3. 每一行包括若干数字，对应上述的属性，数字之间用空格隔开<br/>
-          4. 数字可以是正数、小数和负数
+          4. 数字可以是正数、小数和负数<br/>
+          5. 文件中幕墙数据至少有两行，否则无法进行评价
         </el-card>
       </div>
       <div class="flex">
